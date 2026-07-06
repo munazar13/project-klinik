@@ -14,7 +14,7 @@ if (isset($_POST['simpan'])) {
     $nim_nip        = $_POST['nim_nip'];
     $nama_pasien    = $_POST['nama_pasien'];
     $jenis_kelamin  = $_POST['jenis_kelamin'];
-    $tanggal_lahir      = $_POST['tgl_lahir'];
+    $tanggal_lahir  = $_POST['tgl_lahir'];
     $status_pasien  = $_POST['status_pasien'];
     $fakultas_unit  = $_POST['fakultas_unit'];
     $no_hp          = $_POST['no_hp'];
