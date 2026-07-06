@@ -1,3 +1,21 @@
+<?php
+include "session.php";
+
+
+if (!isset($_SESSION['login'])) {
+    header("Location: index.php");
+    exit;
+}
+
+if ($_SESSION['role'] != 'petugas') {
+    echo "<script>
+            alert('Akses ditolak! Halaman ini hanya untuk petugas.');
+            window.location='dashboard.php';
+          </script>";
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -34,7 +52,7 @@
                     <a href="laporan.php">Rekap Kunjungan</a>
                 </div>
             </li>
-            <li><a href="#">Logout</a></li>
+            <li><a href="logout.php">Logout</a></li>
         </ul>
     </div>
 </header>

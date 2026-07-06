@@ -1,3 +1,15 @@
+<?php
+include "session.php";
+
+if ($_SESSION['role'] != 'admin') {
+    echo "<script>
+            alert('Akses ditolak! Halaman ini hanya untuk admin.');
+            window.location='dashboard.php';
+          </script>";
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -34,7 +46,7 @@
                     <a href="laporan.php">Rekap Kunjungan</a>
                 </div>
             </li>
-            <li><a href="#">Logout</a></li>
+            <li><a href="logout.php">Logout</a></li>
         </ul>
     </div>
 </header>

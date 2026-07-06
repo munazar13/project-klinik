@@ -257,3 +257,55 @@ body {
         margin-top: 6px;
     }
 }
+
+/* ================= CETAK LAPORAN ================= */
+
+@media print {
+
+    body{
+        background: white !important;
+    }
+
+    /* Sembunyikan yang tidak perlu */
+    .topbar,
+    .footer,
+    .btn,
+    .page-header p,
+    form{
+        display: none !important;
+    }
+
+    /* Hilangkan margin container */
+    .container{
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* Hilangkan shadow */
+    .card-modern,
+    .stat-card{
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+
+    /* Judul */
+    .page-header{
+        background: white !important;
+        color: black !important;
+        padding: 0;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    table{
+        width:100%;
+        border-collapse: collapse;
+    }
+
+    table th,
+    table td{
+        border:1px solid #000;
+        padding:8px;
+    }
+
+}
