@@ -190,6 +190,7 @@
 <footer class="footer text-center">
     Sistem Informasi Klinik Kampus Sederhana
 </footer>
+<script src="assets/js/app.js"></script>
 
 </body>
 </html>
