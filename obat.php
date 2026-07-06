@@ -19,12 +19,12 @@
         </a>
 
         <ul class="nav-menu">
-            <li><a href="dashboard.php" class="active">Dashboard</a></li>
+            <li><a href="dashboard.php">Dashboard</a></li>
             <li class="dropdown-css">
                 <a href="#">Data Master <i class="bi bi-chevron-down ms-1"></i></a>
                 <div class="dropdown-css-menu">
                     <a href="pasien.php">Data Pasien</a>
-                    <a href="obat.php">Data Obat</a>
+                    <a href="obat.php" class="active">Data Obat</a>
                 </div>
             </li>
             <li class="dropdown-css">
@@ -42,7 +42,7 @@
 <main class="container">
     <section class="page-header">
         <h1 class="fw-bold mb-2">Data Obat</h1>
-        <p class="mb-0">Kelola data obat klinik kampus sebagai data opsional untuk pencatatan kunjungan.</p>
+        <p class="mb-0">Kelola data obat klinik kampus sebagai data pendukung pencatatan kunjungan.</p>
     </section>
 
     <section class="row g-4">
@@ -50,45 +50,47 @@
             <div class="card-modern p-4">
                 <h5 class="fw-bold mb-3">Form Data Obat</h5>
 
-                <form>
+                <!-- Form dengan class validasi -->
+                <form class="validate-form">
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Kode Obat</label>
-                        <input type="text" class="form-control" placeholder="Contoh: OB001">
+                        <input type="text" name="kode_obat" class="form-control" required placeholder="Contoh: OB001">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Nama Obat</label>
-                        <input type="text" class="form-control" placeholder="Masukkan nama obat">
+                        <input type="text" name="nama_obat" class="form-control" required placeholder="Masukkan nama obat">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Kategori</label>
-                        <input type="text" class="form-control" placeholder="Contoh: Analgesik">
+                        <input type="text" name="kategori" class="form-control" required placeholder="Contoh: Analgesik, Antibiotik">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Satuan</label>
-                        <select class="form-select">
-                            <option>Tablet</option>
-                            <option>Kapsul</option>
-                            <option>Botol</option>
-                            <option>Sachet</option>
-                            <option>Tube</option>
+                        <select name="satuan" class="form-select" required>
+                            <option value="" selected disabled>Pilih satuan</option>
+                            <option value="Tablet">Tablet</option>
+                            <option value="Kapsul">Kapsul</option>
+                            <option value="Botol">Botol</option>
+                            <option value="Sachet">Sachet</option>
+                            <option value="Tube">Tube</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Stok</label>
-                        <input type="number" class="form-control" placeholder="Jumlah stok">
+                        <input type="number" name="stok" class="form-control" min="0" required placeholder="Jumlah stok tersedia">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Keterangan</label>
-                        <textarea class="form-control" rows="3" placeholder="Keterangan obat"></textarea>
+                        <textarea name="keterangan" class="form-control" required rows="3" placeholder="Keterangan tambahan obat"></textarea>
                     </div>
 
                     <div class="d-grid gap-2">
-                        <button class="btn btn-primary" type="button">Simpan Obat</button>
+                        <button class="btn btn-primary" type="submit">Simpan Obat</button>
                         <button class="btn btn-outline-secondary" type="reset">Reset Form</button>
                     </div>
                 </form>
@@ -99,11 +101,18 @@
             <div class="card-modern p-4">
                 <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3">
                     <h5 class="fw-bold mb-0">Daftar Obat</h5>
-                    <input type="text" class="form-control w-md-50" placeholder="Cari kode atau nama obat">
+                    <!-- Kolom cari tanpa required -->
+                    <input
+                        id="searchObat"
+                        type="text"
+                        class="form-control w-md-50"
+                        placeholder="Cari kode atau nama obat..."
+                    >
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <!-- Tabel dengan ID khusus -->
+                    <table id="tableObat" class="table table-hover">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -122,10 +131,14 @@
                                 <td>Paracetamol</td>
                                 <td>Analgesik</td>
                                 <td>Tablet</td>
-                                <td><span class="badge badge-soft-success">150</span></td>
+                                <td><span class="badge bg-success">150</span></td>
                                 <td>
-                                    <button class="btn btn-sm btn-warning action-btn" type="button">Edit</button>
-                                    <button class="btn btn-sm btn-danger action-btn" type="button">Hapus</button>
+                                    <button class="btn btn-sm btn-warning action-btn" type="button">
+                                        <i class="bi bi-pencil-square me-1"></i> Edit
+                                    </button>
+                                    <button class="btn btn-danger btn-sm action-btn btn-delete">
+                                        <i class="bi bi-trash me-1"></i> Hapus
+                                    </button>
                                 </td>
                             </tr>
                             <tr>
@@ -134,10 +147,14 @@
                                 <td>Antasida</td>
                                 <td>Obat Lambung</td>
                                 <td>Tablet</td>
-                                <td><span class="badge badge-soft-warning">80</span></td>
+                                <td><span class="badge bg-warning text-dark">80</span></td>
                                 <td>
-                                    <button class="btn btn-sm btn-warning action-btn" type="button">Edit</button>
-                                    <button class="btn btn-sm btn-danger action-btn" type="button">Hapus</button>
+                                    <button class="btn btn-sm btn-warning action-btn" type="button">
+                                        <i class="bi bi-pencil-square me-1"></i> Edit
+                                    </button>
+                                    <button class="btn btn-danger btn-sm action-btn btn-delete">
+                                        <i class="bi bi-trash me-1"></i> Hapus
+                                    </button>
                                 </td>
                             </tr>
                             <tr>
@@ -146,25 +163,30 @@
                                 <td>Vitamin C</td>
                                 <td>Vitamin</td>
                                 <td>Tablet</td>
-                                <td><span class="badge badge-soft-success">120</span></td>
+                                <td><span class="badge bg-success">120</span></td>
                                 <td>
-                                    <button class="btn btn-sm btn-warning action-btn" type="button">Edit</button>
-                                    <button class="btn btn-sm btn-danger action-btn" type="button">Hapus</button>
+                                    <button class="btn btn-sm btn-warning action-btn" type="button">
+                                        <i class="bi bi-pencil-square me-1"></i> Edit
+                                    </button>
+                                    <button class="btn btn-danger btn-sm action-btn btn-delete">
+                                        <i class="bi bi-trash me-1"></i> Hapus
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <p class="text-muted mb-0 small">Data obat bersifat opsional, tetapi berguna untuk pencatatan tindakan dan pemberian obat.</p>
+                <p class="text-muted mb-0 small">Tombol hapus akan memunculkan konfirmasi dan menghapus baris data secara tampilan.</p>
             </div>
         </div>
     </section>
 </main>
 
-<footer class="footer text-center">
-    Sistem Informasi Klinik Kampus Sederhana
+<footer class="footer text-center mt-4">
+    Sistem Informasi Klinik Kampus Sederhana &copy; 2026
 </footer>
 
+<script src="assets/js/app.js"></script>
 </body>
 </html>

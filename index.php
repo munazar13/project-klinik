@@ -21,15 +21,29 @@
             <p class="text-muted mb-0">Sistem Informasi Klinik Kampus Sederhana</p>
         </div>
 
-        <form action="dashboard.php" method="get">
+        <form id="loginForm" action="dashboard.php" method="get">
+            
             <div class="mb-3">
                 <label class="form-label fw-semibold">Username</label>
-                <input type="text" class="form-control" placeholder="Masukkan username">
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    class="form-control"
+                    placeholder="Masukkan username"
+                    autocomplete="username"
+                    required>
             </div>
-
             <div class="mb-3">
                 <label class="form-label fw-semibold">Password</label>
-                <input type="password" class="form-control" placeholder="Masukkan password">
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="form-control"
+                    placeholder="Masukkan password"
+                    autocomplete="current-password"
+                    required>
             </div>
 
             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -45,6 +59,7 @@
             </button>
         </form>
     </div>
+    <script src="assets/js/app.js"></script>
 
 </body>
 </html>

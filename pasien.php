@@ -19,11 +19,11 @@
         </a>
 
         <ul class="nav-menu">
-            <li><a href="dashboard.php" class="active">Dashboard</a></li>
+            <li><a href="dashboard.php">Dashboard</a></li>
             <li class="dropdown-css">
                 <a href="#">Data Master <i class="bi bi-chevron-down ms-1"></i></a>
                 <div class="dropdown-css-menu">
-                    <a href="pasien.php">Data Pasien</a>
+                    <a href="pasien.php" class="active">Data Pasien</a>
                     <a href="obat.php">Data Obat</a>
                 </div>
             </li>
@@ -50,63 +50,65 @@
             <div class="card-modern p-4">
                 <h5 class="fw-bold mb-3">Form Data Pasien</h5>
 
-                <form>
+                <!-- Form dengan class untuk validasi -->
+                <form class="validate-form">
                     <div class="mb-3">
                         <label class="form-label fw-semibold">No. Rekam Medis</label>
-                        <input type="text" class="form-control" placeholder="Contoh: RM001">
+                        <input type="text" name="no_rm" class="form-control" required placeholder="Contoh: RM001">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">NIM / NIP</label>
-                        <input type="text" class="form-control" placeholder="Masukkan NIM atau NIP">
+                        <input type="text" name="nim_nip" class="form-control" required placeholder="Masukkan NIM atau NIP">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Nama Pasien</label>
-                        <input type="text" class="form-control" placeholder="Masukkan nama pasien">
+                        <input type="text" name="nama" class="form-control" required placeholder="Masukkan nama pasien">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Jenis Kelamin</label>
-                        <select class="form-select">
-                            <option>Pilih jenis kelamin</option>
-                            <option>Laki-laki</option>
-                            <option>Perempuan</option>
+                        <select name="jk" class="form-select" required>
+                            <option value="" selected disabled>Pilih jenis kelamin</option>
+                            <option value="Laki-laki">Laki-laki</option>
+                            <option value="Perempuan">Perempuan</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Tanggal Lahir</label>
-                        <input type="date" class="form-control">
+                        <input type="date" name="tgl_lahir" class="form-control" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Status Pasien</label>
-                        <select class="form-select">
-                            <option>Mahasiswa</option>
-                            <option>Dosen</option>
-                            <option>Pegawai</option>
-                            <option>Umum</option>
+                        <select name="status" class="form-select" required>
+                            <option value="" selected disabled>Pilih status pasien</option>
+                            <option value="Mahasiswa">Mahasiswa</option>
+                            <option value="Dosen">Dosen</option>
+                            <option value="Pegawai">Pegawai</option>
+                            <option value="Umum">Umum</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Fakultas / Unit</label>
-                        <input type="text" class="form-control" placeholder="Contoh: FTK">
+                        <input type="text" name="unit" class="form-control" required placeholder="Contoh: FTK">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">No. HP</label>
-                        <input type="text" class="form-control" placeholder="Masukkan nomor HP">
+                        <input type="text" name="hp" class="form-control" required placeholder="Masukkan nomor HP">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Alamat</label>
-                        <textarea class="form-control" rows="3" placeholder="Masukkan alamat"></textarea>
+                        <textarea name="alamat" class="form-control" required rows="3" placeholder="Masukkan alamat"></textarea>
                     </div>
 
                     <div class="d-grid gap-2">
-                        <button class="btn btn-primary" type="button">Simpan Data</button>
+                        <button class="btn btn-primary" type="submit">Simpan Data</button>
                         <button class="btn btn-outline-secondary" type="reset">Reset Form</button>
                     </div>
                 </form>
@@ -117,11 +119,18 @@
             <div class="card-modern p-4">
                 <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3">
                     <h5 class="fw-bold mb-0">Daftar Pasien</h5>
-                    <input type="text" class="form-control w-md-50" placeholder="Cari nama, NIM, NIP, atau No. RM">
+                    <!-- Kolom cari TANPA required -->
+                    <input
+                        id="searchPasien"
+                        type="text"
+                        class="form-control w-md-50"
+                        placeholder="Cari No. RM, Nama, Status..."
+                    >
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <!-- Tabel dengan ID khusus -->
+                    <table id="tablePasien" class="table table-hover">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -142,8 +151,12 @@
                                 <td>FTK</td>
                                 <td>081234567890</td>
                                 <td>
-                                    <button class="btn btn-sm btn-warning action-btn" type="button">Edit</button>
-                                    <button class="btn btn-sm btn-danger action-btn" type="button">Hapus</button>
+                                    <button class="btn btn-sm btn-warning action-btn" type="button">
+                                        <i class="bi bi-pencil-square me-1"></i> Edit
+                                    </button>
+                                    <button class="btn btn-danger btn-sm action-btn btn-delete">
+                                        <i class="bi bi-trash me-1"></i> Hapus
+                                    </button>
                                 </td>
                             </tr>
                             <tr>
@@ -154,8 +167,12 @@
                                 <td>FEBI</td>
                                 <td>082345678901</td>
                                 <td>
-                                    <button class="btn btn-sm btn-warning action-btn" type="button">Edit</button>
-                                    <button class="btn btn-sm btn-danger action-btn" type="button">Hapus</button>
+                                    <button class="btn btn-sm btn-warning action-btn" type="button">
+                                        <i class="bi bi-pencil-square me-1"></i> Edit
+                                    </button>
+                                    <button class="btn btn-danger btn-sm action-btn btn-delete">
+                                        <i class="bi bi-trash me-1"></i> Hapus
+                                    </button>
                                 </td>
                             </tr>
                             <tr>
@@ -166,23 +183,28 @@
                                 <td>FST</td>
                                 <td>083456789012</td>
                                 <td>
-                                    <button class="btn btn-sm btn-warning action-btn" type="button">Edit</button>
-                                    <button class="btn btn-sm btn-danger action-btn" type="button">Hapus</button>
+                                    <button class="btn btn-sm btn-warning action-btn" type="button">
+                                        <i class="bi bi-pencil-square me-1"></i> Edit
+                                    </button>
+                                    <button class="btn btn-danger btn-sm action-btn btn-delete">
+                                        <i class="bi bi-trash me-1"></i> Hapus
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <p class="text-muted mb-0 small">Tombol edit dan hapus hanya rancangan tampilan karena tidak menggunakan PHP dan JavaScript.</p>
+                <p class="text-muted mb-0 small">Tombol edit dan hapus berfungsi sebagai tampilan simulasi (belum terhubung ke database).</p>
             </div>
         </div>
     </section>
 </main>
 
-<footer class="footer text-center">
-    Sistem Informasi Klinik Kampus Sederhana
+<footer class="footer text-center mt-4">
+    Sistem Informasi Klinik Kampus Sederhana &copy; 2026
 </footer>
 
+<script src="assets/js/app.js"></script>
 </body>
 </html>

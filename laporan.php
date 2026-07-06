@@ -19,7 +19,7 @@
         </a>
 
         <ul class="nav-menu">
-            <li><a href="dashboard.php" class="active">Dashboard</a></li>
+            <li><a href="dashboard.php">Dashboard</a></li>
             <li class="dropdown-css">
                 <a href="#">Data Master <i class="bi bi-chevron-down ms-1"></i></a>
                 <div class="dropdown-css-menu">
@@ -31,7 +31,7 @@
                 <a href="#">Transaksi <i class="bi bi-chevron-down ms-1"></i></a>
                 <div class="dropdown-css-menu">
                     <a href="kunjungan.php">Input Kunjungan</a>
-                    <a href="laporan.php">Rekap Kunjungan</a>
+                    <a href="laporan.php" class="active">Rekap Kunjungan</a>
                 </div>
             </li>
             <li><a href="#">Logout</a></li>
@@ -78,32 +78,36 @@
     <section class="card-modern p-4 mb-4">
         <h5 class="fw-bold mb-3">Filter Laporan</h5>
 
-        <div class="row g-3">
-            <div class="col-md-3">
-                <label class="form-label fw-semibold">Tanggal Awal</label>
-                <input type="date" class="form-control">
-            </div>
+        <!-- Form filter dengan class validasi -->
+        <form class="validate-form">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Tanggal Awal</label>
+                    <input type="date" name="tgl_awal" class="form-control" required>
+                </div>
 
-            <div class="col-md-3">
-                <label class="form-label fw-semibold">Tanggal Akhir</label>
-                <input type="date" class="form-control">
-            </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Tanggal Akhir</label>
+                    <input type="date" name="tgl_akhir" class="form-control" required>
+                </div>
 
-            <div class="col-md-3">
-                <label class="form-label fw-semibold">Status Pasien</label>
-                <select class="form-select">
-                    <option>Semua Status</option>
-                    <option>Mahasiswa</option>
-                    <option>Dosen</option>
-                    <option>Pegawai</option>
-                    <option>Umum</option>
-                </select>
-            </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Status Pasien</label>
+                    <select name="status" class="form-select" required>
+                        <option value="" selected disabled>Pilih Status Pasien</option>
+                        <option value="Semua">Semua Status</option>
+                        <option value="Mahasiswa">Mahasiswa</option>
+                        <option value="Dosen">Dosen</option>
+                        <option value="Pegawai">Pegawai</option>
+                        <option value="Umum">Umum</option>
+                    </select>
+                </div>
 
-            <div class="col-md-3 d-flex align-items-end">
-                <button class="btn btn-primary w-100" type="button">Tampilkan</button>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button class="btn btn-primary w-100" type="submit">Tampilkan</button>
+                </div>
             </div>
-        </div>
+        </form>
     </section>
 
     <section class="card-modern p-4">
@@ -115,7 +119,7 @@
         </div>
 
         <div class="table-responsive">
-            <table class="table table-hover">
+            <table id="tableLaporan" class="table table-hover">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -137,7 +141,7 @@
                         <td>2</td>
                         <td>1</td>
                         <td>1</td>
-                        <td><span class="badge badge-soft-success">14</span></td>
+                        <td><span class="badge bg-success">14</span></td>
                     </tr>
                     <tr>
                         <td>2</td>
@@ -147,7 +151,7 @@
                         <td>2</td>
                         <td>2</td>
                         <td>0</td>
-                        <td><span class="badge badge-soft-success">20</span></td>
+                        <td><span class="badge bg-success">20</span></td>
                     </tr>
                     <tr>
                         <td>3</td>
@@ -157,21 +161,23 @@
                         <td>1</td>
                         <td>1</td>
                         <td>1</td>
-                        <td><span class="badge badge-soft-success">16</span></td>
+                        <td><span class="badge bg-success">16</span></td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <div class="alert alert-info mb-0">
-            Halaman ini merupakan rancangan tampilan rekap. Untuk rekap otomatis dari database diperlukan bahasa backend seperti PHP.
+        <div class="alert alert-info mt-4 mb-0">
+            <i class="bi bi-info-circle me-2"></i>
+            Halaman ini merupakan tampilan rekap data. Untuk data otomatis dari database memerlukan koneksi PHP dan MySQL.
         </div>
     </section>
 </main>
 
-<footer class="footer text-center">
-    Sistem Informasi Klinik Kampus Sederhana
+<footer class="footer text-center mt-4">
+    Sistem Informasi Klinik Kampus Sederhana &copy; 2026
 </footer>
 
+<script src="assets/js/app.js"></script>
 </body>
 </html>

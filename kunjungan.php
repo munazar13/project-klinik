@@ -19,7 +19,7 @@
         </a>
 
         <ul class="nav-menu">
-            <li><a href="dashboard.php" class="active">Dashboard</a></li>
+            <li><a href="dashboard.php">Dashboard</a></li>
             <li class="dropdown-css">
                 <a href="#">Data Master <i class="bi bi-chevron-down ms-1"></i></a>
                 <div class="dropdown-css-menu">
@@ -30,7 +30,7 @@
             <li class="dropdown-css">
                 <a href="#">Transaksi <i class="bi bi-chevron-down ms-1"></i></a>
                 <div class="dropdown-css-menu">
-                    <a href="kunjungan.php">Input Kunjungan</a>
+                    <a href="kunjungan.php" class="active">Input Kunjungan</a>
                     <a href="laporan.php">Rekap Kunjungan</a>
                 </div>
             </li>
@@ -50,68 +50,71 @@
             <div class="card-modern p-4">
                 <h5 class="fw-bold mb-3">Form Kunjungan</h5>
 
-                <form>
+                <!-- Form utama dengan class validasi -->
+                <form class="validate-form">
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Tanggal Kunjungan</label>
-                        <input type="date" class="form-control">
+                        <input type="date" name="tgl_kunjungan" class="form-control" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Jam Kunjungan</label>
-                        <input type="time" class="form-control">
+                        <input type="time" name="jam_kunjungan" class="form-control" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Nama Pasien</label>
-                        <select class="form-select">
-                            <option>Pilih pasien</option>
-                            <option>Ahmad Fauzi</option>
-                            <option>Nur Aisyah</option>
-                            <option>Dr. Rahmat Hidayat</option>
+                        <select name="nama_pasien" class="form-select" required>
+                            <option value="" selected disabled>Pilih pasien</option>
+                            <option value="Ahmad Fauzi">Ahmad Fauzi</option>
+                            <option value="Nur Aisyah">Nur Aisyah</option>
+                            <option value="Dr. Rahmat Hidayat">Dr. Rahmat Hidayat</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Keluhan</label>
-                        <textarea class="form-control" rows="3" placeholder="Tuliskan keluhan pasien"></textarea>
+                        <textarea name="keluhan" class="form-control" required rows="3" placeholder="Tuliskan keluhan pasien"></textarea>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Tindakan</label>
-                        <textarea class="form-control" rows="3" placeholder="Tuliskan tindakan yang diberikan"></textarea>
+                        <textarea name="tindakan" class="form-control" required rows="3" placeholder="Tuliskan tindakan yang diberikan"></textarea>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Obat</label>
-                        <select class="form-select">
-                            <option>Tidak ada obat</option>
-                            <option>Paracetamol</option>
-                            <option>Antasida</option>
-                            <option>Vitamin C</option>
+                        <select name="obat" class="form-select" required>
+                            <option value="" selected disabled>Pilih obat</option>
+                            <option value="Tidak ada obat">Tidak ada obat</option>
+                            <option value="Paracetamol">Paracetamol</option>
+                            <option value="Antasida">Antasida</option>
+                            <option value="Vitamin C">Vitamin C</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Jumlah Obat</label>
-                        <input type="number" class="form-control" placeholder="Contoh: 2">
+                        <input type="number" name="jumlah_obat" class="form-control" min="1" required placeholder="Contoh: 2">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Status Kunjungan</label>
-                        <select class="form-select">
-                            <option>Menunggu</option>
-                            <option>Diproses</option>
-                            <option>Selesai</option>
+                        <select name="status_kunjungan" class="form-select" required>
+                            <option value="" selected disabled>Pilih status</option>
+                            <option value="Menunggu">Menunggu</option>
+                            <option value="Diproses">Diproses</option>
+                            <option value="Selesai">Selesai</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Petugas</label>
-                        <input type="text" class="form-control" placeholder="Nama petugas">
+                        <input type="text" name="petugas" class="form-control" required placeholder="Nama petugas yang menangani">
                     </div>
 
                     <div class="d-grid gap-2">
-                        <button class="btn btn-primary" type="button">Simpan Kunjungan</button>
+                        <button class="btn btn-primary" type="submit">Simpan Kunjungan</button>
                         <button class="btn btn-outline-secondary" type="reset">Reset Form</button>
                     </div>
                 </form>
@@ -122,22 +125,25 @@
             <div class="card-modern p-4">
                 <h5 class="fw-bold mb-3">Filter Tanggal Kunjungan</h5>
 
-                <div class="row g-3 mb-4">
-                    <div class="col-md-5">
-                        <label class="form-label fw-semibold">Tanggal Awal</label>
-                        <input type="date" class="form-control">
+                <!-- Form filter dengan class validasi -->
+                <form class="validate-form">
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-5">
+                            <label class="form-label fw-semibold">Tanggal Awal</label>
+                            <input type="date" name="tgl_awal" class="form-control" required>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label fw-semibold">Tanggal Akhir</label>
+                            <input type="date" name="tgl_akhir" class="form-control" required>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button class="btn btn-primary w-100" type="submit">Filter</button>
+                        </div>
                     </div>
-                    <div class="col-md-5">
-                        <label class="form-label fw-semibold">Tanggal Akhir</label>
-                        <input type="date" class="form-control">
-                    </div>
-                    <div class="col-md-2 d-flex align-items-end">
-                        <button class="btn btn-primary w-100" type="button">Filter</button>
-                    </div>
-                </div>
+                </form>
 
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <table id="tableKunjungan" class="table table-hover">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -156,10 +162,14 @@
                                 <td>Ahmad Fauzi</td>
                                 <td>Demam dan sakit kepala</td>
                                 <td>Pemeriksaan dan pemberian obat</td>
-                                <td><span class="badge badge-soft-success">Selesai</span></td>
+                                <td><span class="badge bg-success">Selesai</span></td>
                                 <td>
-                                    <button class="btn btn-sm btn-warning action-btn" type="button">Edit</button>
-                                    <button class="btn btn-sm btn-danger action-btn" type="button">Hapus</button>
+                                    <button class="btn btn-sm btn-warning action-btn" type="button">
+                                        <i class="bi bi-pencil-square me-1"></i> Edit
+                                    </button>
+                                    <button class="btn btn-danger btn-sm action-btn btn-delete">
+                                        <i class="bi bi-trash me-1"></i> Hapus
+                                    </button>
                                 </td>
                             </tr>
                             <tr>
@@ -168,10 +178,14 @@
                                 <td>Nur Aisyah</td>
                                 <td>Nyeri lambung</td>
                                 <td>Konsultasi dan pemberian antasida</td>
-                                <td><span class="badge badge-soft-success">Selesai</span></td>
+                                <td><span class="badge bg-success">Selesai</span></td>
                                 <td>
-                                    <button class="btn btn-sm btn-warning action-btn" type="button">Edit</button>
-                                    <button class="btn btn-sm btn-danger action-btn" type="button">Hapus</button>
+                                    <button class="btn btn-sm btn-warning action-btn" type="button">
+                                        <i class="bi bi-pencil-square me-1"></i> Edit
+                                    </button>
+                                    <button class="btn btn-danger btn-sm action-btn btn-delete">
+                                        <i class="bi bi-trash me-1"></i> Hapus
+                                    </button>
                                 </td>
                             </tr>
                             <tr>
@@ -180,25 +194,30 @@
                                 <td>Dr. Rahmat Hidayat</td>
                                 <td>Pusing ringan</td>
                                 <td>Pemeriksaan tekanan darah</td>
-                                <td><span class="badge badge-soft-warning">Diproses</span></td>
+                                <td><span class="badge bg-warning text-dark">Diproses</span></td>
                                 <td>
-                                    <button class="btn btn-sm btn-warning action-btn" type="button">Edit</button>
-                                    <button class="btn btn-sm btn-danger action-btn" type="button">Hapus</button>
+                                    <button class="btn btn-sm btn-warning action-btn" type="button">
+                                        <i class="bi bi-pencil-square me-1"></i> Edit
+                                    </button>
+                                    <button class="btn btn-danger btn-sm action-btn btn-delete">
+                                        <i class="bi bi-trash me-1"></i> Hapus
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <p class="text-muted mb-0 small">Filter tanggal hanya tampilan rancangan karena tidak menggunakan proses backend.</p>
+                <p class="text-muted mb-0 small">Data kunjungan bersifat simulasi dan belum terhubung ke database.</p>
             </div>
         </div>
     </section>
 </main>
 
-<footer class="footer text-center">
-    Sistem Informasi Klinik Kampus Sederhana
+<footer class="footer text-center mt-4">
+    Sistem Informasi Klinik Kampus Sederhana &copy; 2026
 </footer>
 
+<script src="assets/js/app.js"></script>
 </body>
 </html>
