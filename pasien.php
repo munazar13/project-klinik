@@ -14,7 +14,7 @@ if (isset($_POST['simpan'])) {
     $nim_nip        = $_POST['nim_nip'];
     $nama_pasien    = $_POST['nama_pasien'];
     $jenis_kelamin  = $_POST['jenis_kelamin'];
-    $tanggal_lahir      = $_POST['tgl_lahir'];
+    $tanggal_lahir  = $_POST['tgl_lahir'];
     $status_pasien  = $_POST['status_pasien'];
     $fakultas_unit  = $_POST['fakultas_unit'];
     $no_hp          = $_POST['no_hp'];
@@ -208,6 +208,14 @@ if (isset($_GET['edit'])) {
         <!-- Menu Navigasi -->
         <ul class="nav-menu">
 
+            <!-- Menu Dashboard -->
+            <li>
+                <a href="dashboard.php" class="active">
+                    Dashboard
+                </a>
+            </li>
+
+            <!-- Menu Dropdown Data Master -->
             <li class="dropdown-css">
 
                 <a href="#">
@@ -216,7 +224,7 @@ if (isset($_GET['edit'])) {
                 </a>
 
                 <div class="dropdown-css-menu">
-                    <a href="pasien.php" class="active">Data Pasien</a>
+                    <a href="pasien.php">Data Pasien</a>
                     <a href="obat.php">Data Obat</a>
                 </div>
 
@@ -241,7 +249,7 @@ if (isset($_GET['edit'])) {
             <li>
                 <a href="#">Logout</a>
             </li>
-            <li><a href="#">Logout</a></li>
+
         </ul>
 
     </div>
@@ -305,37 +313,91 @@ if (isset($_GET['edit'])) {
                 <!-- Judul Form -->
                 <h5 class="fw-bold mb-3">Form Data Pasien</h5>
 
-                <form>
+                <!-- Form menggunakan metode POST -->
+                <!-- novalidate digunakan agar validasi memakai Bootstrap -->
+                <form action="" method="POST" class="needs-validation" novalidate>
+
+                    <!-- Menyimpan ID pasien ketika proses Edit -->
+                    <input type="hidden" name="id" value="<?= $edit ? $data_edit['id_pasien'] : ''; ?>">
+
+                    <!-- =========================
+                         Input Nomor Rekam Medis
+                         ========================= -->
                     <div class="mb-3">
                         <label class="form-label fw-semibold">No. Rekam Medis</label>
-                        <input type="text" class="form-control" placeholder="Contoh: RM001">
+
+                        <input type="text" class="form-control" name="no_rm" placeholder="Contoh: RM001" required value="<?= $edit ? $data_edit['no_rm'] : ''; ?>">
+
+                        <!-- Pesan validasi Bootstrap -->
+                        <div class="invalid-feedback">
+                            No. Rekam Medis wajib diisi.
+                        </div>
                     </div>
 
                     <!-- =====================
                          Input NIM / NIP
                          ===================== -->
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">NIM / NIP</label>
-                        <input type="text" class="form-control" placeholder="Masukkan NIM atau NIP">
+
+                        <label class="form-label fw-semibold">
+                            NIM / NIP
+                        </label>
+
+                        <input type="text" class="form-control"
+                               name="nim_nip"
+                               placeholder="Masukkan NIM atau NIP"
+                               value="<?= $edit ? $data_edit['nim_nip'] : ''; ?>">
+
                     </div>
 
                     <!-- =======================
                          Input Nama Pasien
                          ======================= -->
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">Nama Pasien</label>
-                        <input type="text" class="form-control" placeholder="Masukkan nama pasien">
+
+                        <label class="form-label fw-semibold">
+                            Nama Pasien
+                        </label>
+
+                        <input type="text"
+                               class="form-control"
+                               name="nama_pasien"
+                               placeholder="Masukkan nama pasien"
+                               required
+                               value="<?= $edit ? $data_edit['nama_pasien'] : ''; ?>">
+
+                        <!-- Pesan validasi -->
+                        <div class="invalid-feedback">
+                            Nama pasien wajib diisi.
+                        </div>
+
                     </div>
 
                     <!-- ========================
                          Pilihan Jenis Kelamin
                          ======================== -->
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">Jenis Kelamin</label>
-                        <select class="form-select">
-                            <option>Pilih jenis kelamin</option>
-                            <option>Laki-laki</option>
-                            <option>Perempuan</option>
+
+                        <label class="form-label fw-semibold">
+                            Jenis Kelamin
+                        </label>
+
+                        <select class="form-select" name="jenis_kelamin" required>
+
+                            <option value="">
+                                Pilih jenis kelamin
+                            </option>
+
+                            <option value="Laki-laki"
+                            <?= ($edit && $data_edit['jenis_kelamin']=="Laki-laki") ? "selected" : ""; ?>>
+                                Laki-laki
+                            </option>
+
+                            <option value="Perempuan"
+                            <?= ($edit && $data_edit['jenis_kelamin']=="Perempuan") ? "selected" : ""; ?>>
+                                Perempuan
+                            </option>
+
                         </select>
 
                         <!-- Pesan validasi -->
@@ -349,20 +411,53 @@ if (isset($_GET['edit'])) {
                          Input Tanggal Lahir
                          ======================== -->
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">Tanggal Lahir</label>
-                        <input type="date" class="form-control">
+
+                        <label class="form-label fw-semibold">
+                            Tanggal Lahir
+                        </label>
+
+                        <input type="date"
+                               class="form-control"
+                               name="tgl_lahir"
+                               value="<?= $edit ? $data_edit['tanggal_lahir'] : ''; ?>">
+
                     </div>
 
                     <!-- ========================
                          Pilihan Status Pasien
                          ======================== -->
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">Status Pasien</label>
-                        <select class="form-select">
-                            <option>Mahasiswa</option>
-                            <option>Dosen</option>
-                            <option>Pegawai</option>
-                            <option>Umum</option>
+
+                        <label class="form-label fw-semibold">
+                            Status Pasien
+                        </label>
+
+                        <select class="form-select" name="status_pasien" required>
+
+                            <option value="">
+                                Pilih Status Pasien
+                            </option>
+
+                            <option value="Mahasiswa"
+                            <?= ($edit && $data_edit['status_pasien']=="Mahasiswa") ? "selected" : ""; ?>>
+                                Mahasiswa
+                            </option>
+
+                            <option value="Dosen"
+                            <?= ($edit && $data_edit['status_pasien']=="Dosen") ? "selected" : ""; ?>>
+                                Dosen
+                            </option>
+
+                            <option value="Pegawai"
+                            <?= ($edit && $data_edit['status_pasien']=="Pegawai") ? "selected" : ""; ?>>
+                                Pegawai
+                            </option>
+
+                            <option value="Umum"
+                            <?= ($edit && $data_edit['status_pasien']=="Umum") ? "selected" : ""; ?>>
+                                Umum
+                            </option>
+
                         </select>
 
                         <!-- Pesan validasi -->
@@ -376,24 +471,50 @@ if (isset($_GET['edit'])) {
                          Input Fakultas / Unit
                          ========================= -->
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">Fakultas / Unit</label>
-                        <input type="text" class="form-control" placeholder="Contoh: FTK">
+
+                        <label class="form-label fw-semibold">
+                            Fakultas / Unit
+                        </label>
+
+                        <input type="text"
+                               class="form-control"
+                               name="fakultas_unit"
+                               placeholder="Contoh: FTK"
+                               value="<?= $edit ? $data_edit['fakultas_unit'] : ''; ?>">
+
                     </div>
 
                     <!-- =========================
                          Input Nomor HP
                         ========================== -->
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">No. HP</label>
-                        <input type="text" class="form-control" placeholder="Masukkan nomor HP">
+
+                        <label class="form-label fw-semibold">
+                            No. HP
+                        </label>
+
+                        <input type="text"
+                               class="form-control"
+                               name="no_hp"
+                               placeholder="Masukkan nomor HP"
+                               value="<?= $edit ? $data_edit['no_hp'] : ''; ?>">
+
                     </div>
 
                     <!-- =====================
                          Input Alamat
                          ===================== -->
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">Alamat</label>
-                        <textarea class="form-control" rows="3" placeholder="Masukkan alamat"></textarea>
+
+                        <label class="form-label fw-semibold">
+                            Alamat
+                        </label>
+
+                        <textarea class="form-control"
+                                  rows="3"
+                                  name="alamat"
+                                  placeholder="Masukkan alamat"><?= $edit ? $data_edit['alamat'] : '';?></textarea>
+
                     </div>
 
                     <!--==============================================
@@ -401,8 +522,28 @@ if (isset($_GET['edit'])) {
                          Tombol berubah sesuai mode form.
                         ============================================== -->
                     <div class="d-grid gap-2">
-                        <button class="btn btn-primary" type="button">Simpan Data</button>
-                        <button class="btn btn-outline-secondary" type="reset">Reset Form</button>
+
+                        <?php if($edit){ ?>
+
+                            <!-- Tombol Update -->
+                            <button class="btn btn-warning" type="submit" name="update">
+                                Update Data
+                            </button>
+
+                        <?php } else { ?>
+
+                            <!-- Tombol Simpan -->
+                            <button class="btn btn-primary" type="submit" name="simpan">
+                                Simpan Data
+                            </button>
+
+                        <?php } ?>
+
+                        <!-- Tombol Reset -->
+                        <button class="btn btn-outline-secondary" type="reset">
+                            Reset Form
+                        </button>
+
                     </div>
 
                 </form>
@@ -426,8 +567,34 @@ if (isset($_GET['edit'])) {
                      Berisi judul tabel dan fitur pencarian data.
                      ================================================== -->
                 <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3">
-                    <h5 class="fw-bold mb-0">Daftar Pasien</h5>
-                    <input type="text" class="form-control w-md-50" placeholder="Cari nama, NIM, NIP, atau No. RM">
+
+                    <!-- Judul tabel -->
+                    <h5 class="fw-bold mb-0">
+                        Daftar Pasien
+                    </h5>
+
+                    <!-- ==================================================
+                         FORM SEARCH
+                         Digunakan untuk mencari pasien berdasarkan
+                         Nama, No. RM atau NIM/NIP.
+                         ================================================== -->
+                    <form method="GET" class="d-flex">
+
+                        <!-- Input kata kunci pencarian -->
+                        <input type="text"
+                               name="cari"
+                               class="form-control"
+                               placeholder="Cari Nama, NIM/NIP atau No. RM"
+                               value="<?= isset($_GET['cari']) ? $_GET['cari'] : ''; ?>">
+
+                        <!-- Tombol Cari -->
+                        <button type="submit"
+                                class="btn btn-primary ms-2">
+                            Cari
+                        </button>
+
+                    </form>
+
                 </div>
 
                 <!-- ==================================================
@@ -435,7 +602,10 @@ if (isset($_GET['edit'])) {
                      Menampilkan seluruh data pasien dari database.
                     =================================================== -->
                 <div class="table-responsive">
+
                     <table class="table table-hover">
+
+                        <!-- Header Kolom -->
                         <thead>
 
                             <tr>
@@ -451,52 +621,111 @@ if (isset($_GET['edit'])) {
                         </thead>
 
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>RM001</td>
-                                <td>Ahmad Fauzi</td>
-                                <td><span class="badge bg-primary">Mahasiswa</span></td>
-                                <td>FTK</td>
-                                <td>081234567890</td>
-                                <td>
-                                    <button class="btn btn-sm btn-warning action-btn" type="button">Edit</button>
-                                    <button class="btn btn-sm btn-danger action-btn" type="button">Hapus</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>RM002</td>
-                                <td>Nur Aisyah</td>
-                                <td><span class="badge bg-primary">Mahasiswa</span></td>
-                                <td>FEBI</td>
-                                <td>082345678901</td>
-                                <td>
-                                    <button class="btn btn-sm btn-warning action-btn" type="button">Edit</button>
-                                    <button class="btn btn-sm btn-danger action-btn" type="button">Hapus</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>RM003</td>
-                                <td>Dr. Rahmat Hidayat</td>
-                                <td><span class="badge bg-success">Dosen</span></td>
-                                <td>FST</td>
-                                <td>083456789012</td>
-                                <td>
-                                    <button class="btn btn-sm btn-warning action-btn" type="button">Edit</button>
-                                    <button class="btn btn-sm btn-danger action-btn" type="button">Hapus</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
 
-                <p class="text-muted mb-0 small">Tombol edit dan hapus hanya rancangan tampilan karena tidak menggunakan PHP dan JavaScript.</p>
-            </div>
-        </div>
-    </section>
+<?php
+
+// Nomor urut tabel
+$no = 1;
+
+// =========================================
+// FITUR SEARCH
+// Jika user mengetik kata kunci,
+// maka data akan difilter berdasarkan
+// Nama, No. RM, atau NIM/NIP.
+// =========================================
+if(isset($_GET['cari'])){
+
+    // Mengambil kata kunci pencarian
+    $cari = $_GET['cari'];
+
+    // Menjalankan Query pencarian data pasien
+    $query = mysqli_query($conn,
+    "SELECT * FROM pasien
+    WHERE nama_pasien LIKE '%$cari%'
+    OR no_rm LIKE '%$cari%'
+    OR nim_nip LIKE '%$cari%'");
+
+}else{
+
+    // Jika tidak melakukan pencarian,
+    // tampilkan seluruh data pasien.
+    $query = mysqli_query($conn, "SELECT * FROM pasien");
+
+}
+
+// Mengecek apakah hasil  data ditemukan
+if(mysqli_num_rows($query) > 0){
+
+    // ===========================================
+    // Menampilkan seluruh data pasien
+    // satu per satu ke dalam tabel.
+    // ===========================================
+    while($row = mysqli_fetch_assoc($query)){
+?>
+
+<tr>
+
+    <!-- Nomor urut -->
+    <td><?= $no++; ?></td>
+
+    <!-- Nomor Rekam Medis -->
+    <td><?= $row['no_rm']; ?></td>
+
+    <!-- Nama Pasien -->
+    <td><?= $row['nama_pasien']; ?></td>
+
+    <!-- Status Pasien -->
+    <td>
+        <span class="badge bg-primary"> <?= $row['status_pasien']; ?> </span>
+    </td>
+
+    <!-- Fakultas / Unit -->
+    <td><?= $row['fakultas_unit']; ?></td>
+
+    <!-- Nomor HP -->
+    <td><?= $row['no_hp']; ?></td>
+
+    <!-- =================================================
+         Tombol Aksi
+         Digunakan untuk Edit dan Hapus data pasien.
+         ================================================= -->
+    <td>
+        <!-- Tombol Edit -->
+        <a href="pasien.php?edit=<?= $row['id_pasien']; ?>"
+           class="btn btn-sm btn-warning"> Edit </a>
+
+        <!-- Tombol Hapus -->
+        <a href="pasien.php?hapus=<?= $row['id_pasien']; ?>"
+           class="btn btn-sm btn-danger"
+           onclick="return confirm('Yakin ingin menghapus data ini?')"> Hapus </a>
+    </td>
+
+</tr>
+
+<?php
+    }
+}else{
+?>
+
+<!-- Data tidak ditemukan -->
+ <tr>
+    <td colspan="7" class="text-center text-danger"> Data pasien tidak ditemukan. </td>
+ </tr>
+<?php
+}
+?>
+            </tbody>
+               </table>
+                 </div>
+                   </div>
+                     </div>
+            </section>
 </main>
 
+<!--===========================================================
+     FOOTER
+     Menampilkan informasi nama sistem di bagian bawah halaman.
+    =========================================================== -->
 <footer class="footer text-center">
     Sistem Informasi Klinik Kampus Sederhana
 </footer>
@@ -537,6 +766,5 @@ if (isset($_GET['edit'])) {
 <!-- Memanggil file JavaScript Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<script src="assets/js/app.js"></script>
 </body>
 </html>
