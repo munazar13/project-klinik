@@ -49,26 +49,14 @@ if (isset($_SESSION['error'])) {
             </p>
         </div>
 
-        <form action="cek_login.php" method="POST">
-
+        <form action="dashboard.php" method="get">
             <div class="mb-3">
                 <label class="form-label fw-semibold">Username</label>
-                <input
-                    type="text"
-                    name="username"
-                    class="form-control"
-                    placeholder="Masukkan username"
-                    required>
+                <input type="text" class="form-control" placeholder="Masukkan username">
             </div>
-
             <div class="mb-3">
                 <label class="form-label fw-semibold">Password</label>
-                <input
-                    type="password"
-                    name="password"
-                    class="form-control"
-                    placeholder="Masukkan password"
-                    required>
+                <input type="password" class="form-control" placeholder="Masukkan password">
             </div>
 
             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -92,6 +80,7 @@ if (isset($_SESSION['error'])) {
         </form>
 
     </div>
+    <script src="assets/js/app.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

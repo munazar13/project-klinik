@@ -19,9 +19,12 @@ body {
     color: var(--dark);
 }
 
+/* -------------------- HALAMAN LOGIN -------------------- */
 .login-page {
     min-height: 100vh;
-    background: linear-gradient(135deg, #0f4c75, #19a7ce);
+    background: linear-gradient(-45deg, #0f4c75, #19a7ce, #146c94, #6dd5fa);
+    background-size: 400% 400%;
+    animation: gradientBG 10s ease infinite;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -50,6 +53,7 @@ body {
     margin: 0 auto 18px;
 }
 
+/* -------------------- KOMPONEN UMUM -------------------- */
 .form-control,
 .form-select {
     border-radius: 14px;
@@ -178,14 +182,34 @@ body {
     box-shadow: 0 12px 35px rgba(16, 42, 67, 0.06);
 }
 
+/* -------------------- TABEL & TOMBOL -------------------- */
 .table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     vertical-align: middle;
 }
 
 .table thead th {
     background: #eaf7fc;
     color: var(--primary);
-    border-bottom: none;
+    font-weight: 600;
+    text-align: center;
+    padding: 12px 8px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.table tbody td {
+    padding: 12px 8px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.table tbody tr:hover {
+    background-color: #f8fafc;
+    transition: background 0.2s ease;
 }
 
 .badge-soft-success {
@@ -203,16 +227,80 @@ body {
     color: var(--danger);
 }
 
+/* =====================================
+   RAPIKAN TOMBOL EDIT & HAPUS
+===================================== */
 .action-btn {
-    border-radius: 10px;
-    padding: 6px 10px;
+    min-width: 85px;       /* Lebar sama untuk semua tombol */
+    padding: 7px 12px;     /* Jarak dalam tombol pas */
+    border-radius: 8px;    /* Sudut membulat yang serasi */
+    font-size: 13.5px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;              /* Jarak antara ikon dan teks */
+    border: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Warna tombol */
+.btn-warning.action-btn {
+    background-color: var(--warning);
+    color: #212529;
+}
+.btn-warning.action-btn:hover {
+    background-color: #e0a538;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.12);
+}
+
+.btn-danger.action-btn {
+    background-color: var(--danger);
+    color: #ffffff;
+}
+.btn-danger.action-btn:hover {
+    background-color: #c84a57;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.12);
+}
+
+/* Jarak antar tombol agar tidak menempel */
+.action-btn + .action-btn {
+    margin-left: 6px;
+}
+
+.action-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-sm {
     font-size: 13px;
 }
 
-.footer {
-    padding: 26px 0;
-    color: var(--muted);
-    font-size: 14px;
+/* -------------------- VALIDASI INPUT -------------------- */
+.is-invalid {
+    border: 2px solid #dc3545 !important;
+    background-color: #fff8f8;
+}
+
+/* -------------------- RESPONSIF & LAYAR LAPTOP -------------------- */
+@media (min-width: 992px) {
+    .container {
+        max-width: 1140px;
+    }
+    .card-modern {
+        padding: 25px !important;
+    }
+    .form-control, .form-select {
+        padding: 10px 14px;
+        font-size: 15px;
+    }
+    .page-header h1 {
+        font-size: 28px;
+    }
 }
 
 @media (max-width: 992px) {
@@ -221,11 +309,9 @@ body {
         align-items: flex-start !important;
         gap: 14px;
     }
-
     .nav-menu {
         flex-wrap: wrap;
     }
-
     .dropdown-css-menu {
         left: 0;
         right: auto;
@@ -236,76 +322,20 @@ body {
     .login-card {
         padding: 26px;
     }
-
     .page-header {
         padding: 24px;
     }
-
     .nav-menu {
         display: block;
         width: 100%;
     }
-
     .nav-menu li {
         margin-bottom: 6px;
     }
-
     .dropdown-css-menu {
         position: static;
         box-shadow: none;
         border: 1px solid #edf3f7;
         margin-top: 6px;
     }
-}
-
-/* ================= CETAK LAPORAN ================= */
-
-@media print {
-
-    body{
-        background: white !important;
-    }
-
-    /* Sembunyikan yang tidak perlu */
-    .topbar,
-    .footer,
-    .btn,
-    .page-header p,
-    form{
-        display: none !important;
-    }
-
-    /* Hilangkan margin container */
-    .container{
-        width: 100%;
-        max-width: 100%;
-    }
-
-    /* Hilangkan shadow */
-    .card-modern,
-    .stat-card{
-        box-shadow: none;
-        border: 1px solid #000;
-    }
-
-    /* Judul */
-    .page-header{
-        background: white !important;
-        color: black !important;
-        padding: 0;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-    table{
-        width:100%;
-        border-collapse: collapse;
-    }
-
-    table th,
-    table td{
-        border:1px solid #000;
-        padding:8px;
-    }
-
 }
