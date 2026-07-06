@@ -1,137 +1,443 @@
+<?php
+// Menghubungkan file ini dengan database
+include 'koneksi.php';
+
+// ======================================================
+// CREATE DATA PASIEN
+// Bagian ini berfungsi untuk menyimpan data pasien baru
+// ke dalam tabel pasien di database.
+// ======================================================
+if (isset($_POST['simpan'])) {
+
+    // Mengambil semua data yang dikirim dari form menggunakan metode POST
+    $no_rm          = $_POST['no_rm'];
+    $nim_nip        = $_POST['nim_nip'];
+    $nama_pasien    = $_POST['nama_pasien'];
+    $jenis_kelamin  = $_POST['jenis_kelamin'];
+    $tanggal_lahir      = $_POST['tgl_lahir'];
+    $status_pasien  = $_POST['status_pasien'];
+    $fakultas_unit  = $_POST['fakultas_unit'];
+    $no_hp          = $_POST['no_hp'];
+    $alamat         = $_POST['alamat'];
+
+    // Validasi data penting agar tidak boleh kosong
+    if (empty($no_rm) || empty($nama_pasien) || empty($jenis_kelamin)) {
+
+        // Menampilkan pesan jika data wajib belum diisi
+        echo "<script>alert('Gagal! No. RM, Nama Pasien, dan Jenis Kelamin wajib diisi.');</script>";
+
+    } else {
+
+        // Query INSERT untuk menambahkan data pasien ke database
+        $query_tambah = "INSERT INTO pasien
+        (no_rm, nim_nip, nama_pasien, jenis_kelamin, tanggal_lahir, status_pasien, fakultas_unit, no_hp, alamat)
+        VALUES
+        ('$no_rm', '$nim_nip', '$nama_pasien', '$jenis_kelamin', '$tanggal_lahir', '$status_pasien', '$fakultas_unit', '$no_hp', '$alamat')";
+
+        // Menjalankan query INSERT
+        $simpan_data = mysqli_query($conn, $query_tambah);
+
+        // Jika berhasil maka kembali ke halaman pasien
+        if ($simpan_data) {
+
+            header("Location: pasien.php?pesan=tambah");
+            exit;
+
+        } else {
+
+            // Jika gagal menampilkan pesan error
+            echo "<script>alert('Gagal menyimpan data ke database.');</script>";
+        }
+    }
+}
+
+// ======================================================
+// UPDATE DATA PASIEN
+// Bagian ini digunakan untuk mengubah data pasien
+// berdasarkan ID pasien yang dipilih.
+// ======================================================
+if (isset($_POST['update'])) {
+
+    // Mengambil ID pasien yang akan diupdate
+    $id = $_POST['id'];
+
+    // Mengambil data terbaru dari form
+    $no_rm = $_POST['no_rm'];
+    $nim_nip = $_POST['nim_nip'];
+    $nama_pasien = $_POST['nama_pasien'];
+    $jenis_kelamin = $_POST['jenis_kelamin'];
+    $tgl_lahir = $_POST['tgl_lahir'];
+    $status_pasien = $_POST['status_pasien'];
+    $fakultas_unit = $_POST['fakultas_unit'];
+    $no_hp = $_POST['no_hp'];
+    $alamat = $_POST['alamat'];
+
+    // Query UPDATE untuk memperbarui data pasien
+    $query_update = mysqli_query($conn, "UPDATE pasien SET
+        no_rm='$no_rm',
+        nim_nip='$nim_nip',
+        nama_pasien='$nama_pasien',
+        jenis_kelamin='$jenis_kelamin',
+        tanggal_lahir='$tgl_lahir',
+        status_pasien='$status_pasien',
+        fakultas_unit='$fakultas_unit',
+        no_hp='$no_hp',
+        alamat='$alamat'
+        WHERE id_pasien='$id'");
+
+    // Jika update berhasil
+    if ($query_update) {
+
+        header("Location: pasien.php?pesan=update");
+        exit;
+
+    } else {
+
+        // Jika update gagal
+        echo "<script>alert('Update data gagal!');</script>";
+    }
+}
+
+// ======================================================
+// DELETE DATA PASIEN
+// Bagian ini berfungsi menghapus data pasien berdasarkan
+// ID yang dipilih dari tombol Hapus.
+// ======================================================
+if (isset($_GET['hapus'])) {
+
+    // Mengambil ID pasien dari URL
+    $id = $_GET['hapus'];
+
+    // Menjalankan query DELETE
+    $hapus = mysqli_query($conn, "DELETE FROM pasien WHERE id_pasien='$id'");
+
+    // Jika berhasil dihapus
+    if ($hapus) {
+
+        header("Location: pasien.php?pesan=hapus");
+        exit;
+
+    } else {
+
+        // Jika gagal menghapus
+        echo "<script>alert('Data pasien gagal dihapus!');</script>";
+    }
+}
+
+// ======================================================
+// READ DATA PASIEN
+// Mengambil seluruh data pasien dari database.
+// Data ini nantinya akan ditampilkan pada tabel.
+// ======================================================
+$query = mysqli_query($conn, "SELECT * FROM pasien");
+
+// ======================================================
+// EDIT DATA PASIEN
+// Bagian ini mengambil data pasien berdasarkan ID,
+// kemudian menampilkannya kembali ke dalam form
+// agar dapat diperbarui.
+// ======================================================
+
+// Menandakan apakah form sedang dalam mode edit atau tidak
+$edit = false;
+
+// Mengecek apakah tombol Edit ditekan
+if (isset($_GET['edit'])) {
+
+    // Mengubah status menjadi mode edit
+    $edit = true;
+
+    // Mengambil ID pasien dari URL
+    $id = $_GET['edit'];
+
+    // Mengambil data pasien sesuai ID
+    $ambil = mysqli_query($conn, "SELECT * FROM pasien WHERE id_pasien='$id'");
+
+    // Mengubah hasil query menjadi array agar bisa dipanggil di form
+    $data_edit = mysqli_fetch_assoc($ambil);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+    <!-- ======================================================
+         BAGIAN HEAD
+         Berisi pengaturan halaman, judul, dan file CSS
+         ======================================================= -->
+
+    <!-- Menentukan karakter yang digunakan -->
     <meta charset="UTF-8">
+
+    <!-- Membuat tampilan responsive di berbagai ukuran layar -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Judul halaman yang tampil pada tab browser -->
     <title>Data Pasien</title>
 
+    <!-- Memanggil Framework Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Memanggil Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Memanggil CSS buatan sendiri -->
     <link href="css/style.css" rel="stylesheet">
 </head>
+
 <body>
 
+<!--===============================================
+     HEADER
+     Berisi logo aplikasi dan menu navigasi
+    =============================================== -->
 <header class="topbar py-3">
+
     <div class="container d-flex justify-content-between align-items-center">
+
+        <!-- Logo Sistem Klinik -->
         <a href="dashboard.php" class="brand-box">
-            <span class="brand-icon"><i class="bi bi-hospital"></i></span>
+            <span class="brand-icon">
+                <i class="bi bi-hospital"></i>
+            </span>
+
             <span>Klinik Kampus</span>
         </a>
 
+        <!-- Menu Navigasi -->
         <ul class="nav-menu">
-            <li><a href="dashboard.php">Dashboard</a></li>
+
             <li class="dropdown-css">
-                <a href="#">Data Master <i class="bi bi-chevron-down ms-1"></i></a>
+
+                <a href="#">
+                    Data Master
+                    <i class="bi bi-chevron-down ms-1"></i>
+                </a>
+
                 <div class="dropdown-css-menu">
                     <a href="pasien.php" class="active">Data Pasien</a>
                     <a href="obat.php">Data Obat</a>
                 </div>
+
             </li>
+
+            <!-- Menu Dropdown Transaksi -->
             <li class="dropdown-css">
-                <a href="#">Transaksi <i class="bi bi-chevron-down ms-1"></i></a>
+
+                <a href="#">
+                    Transaksi
+                    <i class="bi bi-chevron-down ms-1"></i>
+                </a>
+
                 <div class="dropdown-css-menu">
                     <a href="kunjungan.php">Input Kunjungan</a>
                     <a href="laporan.php">Rekap Kunjungan</a>
                 </div>
+
             </li>
-            <li><a href="#">Logout</a></li>
+
+            <!-- Menu Logout -->
+            <li>
+                <a href="#">Logout</a>
+            </li>
+
         </ul>
+
     </div>
+
 </header>
 
+<!-- =======================================================
+     HALAMAN UTAMA
+     Berisi notifikasi, form CRUD, dan tabel data pasien
+     ======================================================= -->
 <main class="container">
-    <section class="page-header">
+
+    <!-- Menampilkan notifikasi setelah proses tambah, update, atau hapus -->
+    <?php if(isset($_GET['pesan'])){ ?>
+
+    <?php if($_GET['pesan']=="tambah"){ ?>
+        <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+            <strong>Berhasil!</strong> Data pasien berhasil ditambahkan.
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <?php } ?>
+
+    <?php if($_GET['pesan']=="update"){ ?>
+        <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+            <strong>Berhasil!</strong> Data pasien berhasil diperbarui.
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <?php } ?>
+
+    <?php if($_GET['pesan']=="hapus"){ ?>
+        <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+            <strong>Berhasil!</strong> Data pasien berhasil dihapus.
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <?php } ?>
+
+<?php } ?>
+
+<!-- Header Judul Halaman -->
+<section class="page-header">
         <h1 class="fw-bold mb-2">CRUD Data Pasien</h1>
         <p class="mb-0">Kelola data pasien klinik kampus seperti mahasiswa, dosen, pegawai, dan umum.</p>
     </section>
 
+    <!-- ===================================================
+         BAGIAN FORM INPUT DATA PASIEN
+         Form ini digunakan untuk menambah data pasien baru
+         maupun mengubah data pasien yang sudah ada.
+         =================================================== -->
     <section class="row g-4">
+
+        <!-- ========================================
+             KOLOM KIRI
+             Berisi Form Input Data Pasien
+             ======================================== -->
         <div class="col-lg-4">
+
+            <!-- Card sebagai wadah form -->
             <div class="card-modern p-4">
+
+                <!-- Judul Form -->
                 <h5 class="fw-bold mb-3">Form Data Pasien</h5>
 
-                <!-- Form dengan class untuk validasi -->
-                <form class="validate-form">
+                <form>
                     <div class="mb-3">
                         <label class="form-label fw-semibold">No. Rekam Medis</label>
-                        <input type="text" name="no_rm" class="form-control" required placeholder="Contoh: RM001">
+                        <input type="text" class="form-control" placeholder="Contoh: RM001">
                     </div>
 
+                    <!-- =====================
+                         Input NIM / NIP
+                         ===================== -->
                     <div class="mb-3">
                         <label class="form-label fw-semibold">NIM / NIP</label>
-                        <input type="text" name="nim_nip" class="form-control" required placeholder="Masukkan NIM atau NIP">
+                        <input type="text" class="form-control" placeholder="Masukkan NIM atau NIP">
                     </div>
 
+                    <!-- =======================
+                         Input Nama Pasien
+                         ======================= -->
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Nama Pasien</label>
-                        <input type="text" name="nama" class="form-control" required placeholder="Masukkan nama pasien">
+                        <input type="text" class="form-control" placeholder="Masukkan nama pasien">
                     </div>
 
+                    <!-- ========================
+                         Pilihan Jenis Kelamin
+                         ======================== -->
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Jenis Kelamin</label>
-                        <select name="jk" class="form-select" required>
-                            <option value="" selected disabled>Pilih jenis kelamin</option>
-                            <option value="Laki-laki">Laki-laki</option>
-                            <option value="Perempuan">Perempuan</option>
+                        <select class="form-select">
+                            <option>Pilih jenis kelamin</option>
+                            <option>Laki-laki</option>
+                            <option>Perempuan</option>
                         </select>
+
+                        <!-- Pesan validasi -->
+                        <div class="invalid-feedback">
+                            Silakan pilih jenis kelamin.
+                        </div>
+
                     </div>
 
+                    <!-- ========================
+                         Input Tanggal Lahir
+                         ======================== -->
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Tanggal Lahir</label>
-                        <input type="date" name="tgl_lahir" class="form-control" required>
+                        <input type="date" class="form-control">
                     </div>
 
+                    <!-- ========================
+                         Pilihan Status Pasien
+                         ======================== -->
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Status Pasien</label>
-                        <select name="status" class="form-select" required>
-                            <option value="" selected disabled>Pilih status pasien</option>
-                            <option value="Mahasiswa">Mahasiswa</option>
-                            <option value="Dosen">Dosen</option>
-                            <option value="Pegawai">Pegawai</option>
-                            <option value="Umum">Umum</option>
+                        <select class="form-select">
+                            <option>Mahasiswa</option>
+                            <option>Dosen</option>
+                            <option>Pegawai</option>
+                            <option>Umum</option>
                         </select>
+
+                        <!-- Pesan validasi -->
+                        <div class="invalid-feedback">
+                            Silakan pilih status pasien.
+                        </div>
+
                     </div>
 
+                    <!-- =========================
+                         Input Fakultas / Unit
+                         ========================= -->
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Fakultas / Unit</label>
-                        <input type="text" name="unit" class="form-control" required placeholder="Contoh: FTK">
+                        <input type="text" class="form-control" placeholder="Contoh: FTK">
                     </div>
 
+                    <!-- =========================
+                         Input Nomor HP
+                        ========================== -->
                     <div class="mb-3">
                         <label class="form-label fw-semibold">No. HP</label>
-                        <input type="text" name="hp" class="form-control" required placeholder="Masukkan nomor HP">
+                        <input type="text" class="form-control" placeholder="Masukkan nomor HP">
                     </div>
 
+                    <!-- =====================
+                         Input Alamat
+                         ===================== -->
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Alamat</label>
-                        <textarea name="alamat" class="form-control" required rows="3" placeholder="Masukkan alamat"></textarea>
+                        <textarea class="form-control" rows="3" placeholder="Masukkan alamat"></textarea>
                     </div>
 
+                    <!--==============================================
+                         Tombol Simpan / Update
+                         Tombol berubah sesuai mode form.
+                        ============================================== -->
                     <div class="d-grid gap-2">
-                        <button class="btn btn-primary" type="submit">Simpan Data</button>
+                        <button class="btn btn-primary" type="button">Simpan Data</button>
                         <button class="btn btn-outline-secondary" type="reset">Reset Form</button>
                     </div>
+
                 </form>
+
             </div>
+
         </div>
 
+        <!-- ======================================================
+             KOLOM KANAN
+             Menampilkan daftar seluruh data pasien yang tersimpan
+             di dalam database.
+             ====================================================== -->
         <div class="col-lg-8">
+
+            <!-- Card untuk tabel data pasien -->
             <div class="card-modern p-4">
+
+                <!-- ==================================================
+                     Bagian Header Tabel
+                     Berisi judul tabel dan fitur pencarian data.
+                     ================================================== -->
                 <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3">
                     <h5 class="fw-bold mb-0">Daftar Pasien</h5>
-                    <!-- Kolom cari TANPA required -->
-                    <input
-                        id="searchPasien"
-                        type="text"
-                        class="form-control w-md-50"
-                        placeholder="Cari No. RM, Nama, Status..."
-                    >
+                    <input type="text" class="form-control w-md-50" placeholder="Cari nama, NIM, NIP, atau No. RM">
                 </div>
 
+                <!-- ==================================================
+                     TABEL DATA PASIEN
+                     Menampilkan seluruh data pasien dari database.
+                    =================================================== -->
                 <div class="table-responsive">
-                    <!-- Tabel dengan ID khusus -->
-                    <table id="tablePasien" class="table table-hover">
+                    <table class="table table-hover">
                         <thead>
+
                             <tr>
                                 <th>No</th>
                                 <th>No. RM</th>
@@ -141,7 +447,9 @@
                                 <th>No. HP</th>
                                 <th>Aksi</th>
                             </tr>
+
                         </thead>
+
                         <tbody>
                             <tr>
                                 <td>1</td>
@@ -151,12 +459,8 @@
                                 <td>FTK</td>
                                 <td>081234567890</td>
                                 <td>
-                                    <button class="btn btn-sm btn-warning action-btn" type="button">
-                                        <i class="bi bi-pencil-square me-1"></i> Edit
-                                    </button>
-                                    <button class="btn btn-danger btn-sm action-btn btn-delete">
-                                        <i class="bi bi-trash me-1"></i> Hapus
-                                    </button>
+                                    <button class="btn btn-sm btn-warning action-btn" type="button">Edit</button>
+                                    <button class="btn btn-sm btn-danger action-btn" type="button">Hapus</button>
                                 </td>
                             </tr>
                             <tr>
@@ -167,12 +471,8 @@
                                 <td>FEBI</td>
                                 <td>082345678901</td>
                                 <td>
-                                    <button class="btn btn-sm btn-warning action-btn" type="button">
-                                        <i class="bi bi-pencil-square me-1"></i> Edit
-                                    </button>
-                                    <button class="btn btn-danger btn-sm action-btn btn-delete">
-                                        <i class="bi bi-trash me-1"></i> Hapus
-                                    </button>
+                                    <button class="btn btn-sm btn-warning action-btn" type="button">Edit</button>
+                                    <button class="btn btn-sm btn-danger action-btn" type="button">Hapus</button>
                                 </td>
                             </tr>
                             <tr>
@@ -183,27 +483,59 @@
                                 <td>FST</td>
                                 <td>083456789012</td>
                                 <td>
-                                    <button class="btn btn-sm btn-warning action-btn" type="button">
-                                        <i class="bi bi-pencil-square me-1"></i> Edit
-                                    </button>
-                                    <button class="btn btn-danger btn-sm action-btn btn-delete">
-                                        <i class="bi bi-trash me-1"></i> Hapus
-                                    </button>
+                                    <button class="btn btn-sm btn-warning action-btn" type="button">Edit</button>
+                                    <button class="btn btn-sm btn-danger action-btn" type="button">Hapus</button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <p class="text-muted mb-0 small">Tombol edit dan hapus berfungsi sebagai tampilan simulasi (belum terhubung ke database).</p>
+                <p class="text-muted mb-0 small">Tombol edit dan hapus hanya rancangan tampilan karena tidak menggunakan PHP dan JavaScript.</p>
             </div>
         </div>
     </section>
 </main>
 
-<footer class="footer text-center mt-4">
-    Sistem Informasi Klinik Kampus Sederhana &copy; 2026
+<footer class="footer text-center">
+    Sistem Informasi Klinik Kampus Sederhana
 </footer>
+
+<!-- ======================================================
+     JAVASCRIPT VALIDASI FORM
+     Digunakan untuk mengaktifkan validasi Bootstrap
+     sehingga form tidak dapat dikirim jika data wajib
+     belum diisi.
+     ====================================================== -->
+<script>
+(() => {
+    'use strict';
+
+    // Mengambil seluruh form yang menggunakan validasi Bootstrap
+    const forms = document.querySelectorAll('.needs-validation');
+
+    // Mengecek setiap form sebelum dikirim
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+
+            // Jika ada input yang belum valid,
+            // form tidak akan dikirim.
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            // Menampilkan tampilan validasi Bootstrap
+            form.classList.add('was-validated');
+
+        }, false);
+    });
+
+})();
+</script>
+
+<!-- Memanggil file JavaScript Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script src="assets/js/app.js"></script>
 </body>
