@@ -1,7 +1,7 @@
 <?php
 // Menghubungkan file ini dengan koneksi database
 include "koneksi.php";
-
+include "session.php";
 // Menentukan apakah sedang dalam mode edit atau tidak
 $edit = false;
 

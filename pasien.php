@@ -1,7 +1,7 @@
 <?php
 // Menghubungkan file ini dengan database
-include 'koneksi.php';
-
+include "koneksi.php";
+include "session.php";
 // ======================================================
 // CREATE DATA PASIEN
 // Bagian ini berfungsi untuk menyimpan data pasien baru
