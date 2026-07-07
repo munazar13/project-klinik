@@ -1,3 +1,68 @@
+<?php
+include "session.php";
+include "koneksi.php";
+
+// Total Pasien
+$totalPasien = mysqli_fetch_assoc(mysqli_query($conn,
+"SELECT COUNT(*) AS total FROM pasien"));
+
+// Total Obat
+$totalObat = mysqli_fetch_assoc(mysqli_query($conn,
+"SELECT COUNT(*) AS total FROM obat"));
+
+// Total Seluruh Kunjungan
+$totalKunjungan = mysqli_fetch_assoc(mysqli_query($conn,
+"SELECT COUNT(*) AS total FROM kunjungan"));
+
+// Total Kunjungan Hari Ini
+$kunjunganHariIni = mysqli_fetch_assoc(mysqli_query($conn,
+"SELECT COUNT(*) AS total
+FROM kunjungan
+WHERE tanggal_kunjungan = CURDATE()"));
+
+// Total Kunjungan Selesai
+$kunjunganSelesai = mysqli_fetch_assoc(mysqli_query($conn,
+"SELECT COUNT(*) AS total
+FROM kunjungan
+WHERE status_kunjungan='Selesai'"));
+
+// Total Stok Obat
+$totalStok = mysqli_fetch_assoc(mysqli_query($conn,
+"SELECT SUM(stok) AS total
+FROM obat"));
+
+//tabel kunjungan
+$queryKunjungan = mysqli_query($conn,"
+SELECT
+kunjungan.*,
+pasien.nama_pasien
+FROM kunjungan
+JOIN pasien
+ON kunjungan.id_pasien=pasien.id_pasien
+ORDER BY tanggal_kunjungan DESC,
+jam_kunjungan DESC
+LIMIT 5
+");
+
+// Rekap Status Kunjungan
+$selesai = mysqli_fetch_assoc(mysqli_query($conn,
+"SELECT COUNT(*) AS total FROM kunjungan WHERE status_kunjungan='Selesai'"));
+
+$diproses = mysqli_fetch_assoc(mysqli_query($conn,
+"SELECT COUNT(*) AS total FROM kunjungan WHERE status_kunjungan='Diproses'"));
+
+$menunggu = mysqli_fetch_assoc(mysqli_query($conn,
+"SELECT COUNT(*) AS total FROM kunjungan WHERE status_kunjungan='Menunggu'"));
+
+$total = $totalKunjungan['total'];
+
+$persenSelesai = ($total > 0) ? round(($selesai['total'] / $total) * 100) : 0;
+$persenDiproses = ($total > 0) ? round(($diproses['total'] / $total) * 100) : 0;
+$persenMenunggu = ($total > 0) ? round(($menunggu['total'] / $total) * 100) : 0;
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -34,7 +99,7 @@
                     <a href="laporan.php">Rekap Kunjungan</a>
                 </div>
             </li>
-            <li><a href="#">Logout</a></li>
+            <li><a href="logout.php">Logout</a></li>
         </ul>
     </div>
 </header>
@@ -44,62 +109,99 @@
         <div class="row align-items-center">
             <div class="col-lg-8">
                 <h1 class="fw-bold mb-2">Dashboard Klinik Kampus</h1>
+                <p class="mb-0">
+                    <i class="bi bi-clock"></i>
+                    <span id="jam"></span>
+                </p>
                 <p class="mb-0">Pantau data pasien, kunjungan harian, keluhan, tindakan, dan rekap layanan kesehatan kampus.</p>
             </div>
             <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
-                <span class="badge bg-light text-primary fs-6 px-3 py-2">Hari ini: 01 Juli 2026</span>
+                <span class="badge bg-light text-primary fs-6 px-3 py-2">Hari ini: <?= date('d F Y'); ?></span>
             </div>
         </div>
     </section>
 
     <section class="row g-4 mb-4">
-        <div class="col-md-6 col-xl-3">
+        <div class="col-md-6 col-xl-4">
             <div class="stat-card">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <p class="text-muted mb-1">Total Pasien</p>
-                        <h3 class="fw-bold mb-0">128</h3>
+                        <h3 class="fw-bold mb-0"><?= $totalPasien['total']; ?></h3>
                     </div>
                     <div class="stat-icon"><i class="bi bi-people"></i></div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-6 col-xl-3">
+        <div class="col-md-6 col-xl-4">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-muted mb-1">Total Obat</p>
+                        <h3 class="fw-bold mb-0"><?= $totalObat['total']; ?></h3>
+                    </div>
+
+                    <div class="stat-icon">
+                        <i class="bi bi-capsule"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-4">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-muted mb-1">Total Kunjungan</p>
+                        <h3 class="fw-bold mb-0"><?= $totalKunjungan['total']; ?></h3>
+                    </div>
+
+                    <div class="stat-icon">
+                        <i class="bi bi-clipboard2-pulse"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-4">
             <div class="stat-card">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <p class="text-muted mb-1">Kunjungan Hari Ini</p>
-                        <h3 class="fw-bold mb-0">18</h3>
+                        <h3 class="fw-bold mb-0"><?= $kunjunganHariIni['total']; ?></h3>
                     </div>
                     <div class="stat-icon"><i class="bi bi-calendar2-check"></i></div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-6 col-xl-3">
+        <div class="col-md-6 col-xl-4">
             <div class="stat-card">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <p class="text-muted mb-1">Kunjungan Selesai</p>
-                        <h3 class="fw-bold mb-0">14</h3>
+                        <h3 class="fw-bold mb-0"><?= $kunjunganSelesai['total']; ?></h3>
                     </div>
                     <div class="stat-icon"><i class="bi bi-check2-circle"></i></div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-6 col-xl-3">
+        <div class="col-md-6 col-xl-4">
             <div class="stat-card">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <p class="text-muted mb-1">Stok Obat</p>
-                        <h3 class="fw-bold mb-0">350</h3>
+                        <h3 class="fw-bold mb-0"><?= $totalStok['total']; ?></h3>
                     </div>
                     <div class="stat-icon"><i class="bi bi-capsule"></i></div>
                 </div>
             </div>
         </div>
+
+
+
     </section>
 
     <section class="row g-4">
@@ -122,27 +224,45 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>01/07/2026</td>
-                                <td>Ahmad Fauzi</td>
-                                <td>Demam dan sakit kepala</td>
-                                <td><span class="badge badge-soft-success">Selesai</span></td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>01/07/2026</td>
-                                <td>Nur Aisyah</td>
-                                <td>Nyeri lambung</td>
-                                <td><span class="badge badge-soft-success">Selesai</span></td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>01/07/2026</td>
-                                <td>Rahmat Hidayat</td>
-                                <td>Pusing ringan</td>
-                                <td><span class="badge badge-soft-warning">Diproses</span></td>
-                            </tr>
+
+                        <?php
+                        $no=1;
+
+                        while($row=mysqli_fetch_assoc($queryKunjungan)){
+                        ?>
+
+                        <tr>
+
+                        <td><?= $no++; ?></td>
+
+                        <td><?= date('d-m-Y',strtotime($row['tanggal_kunjungan'])); ?></td>
+
+                        <td><?= $row['nama_pasien']; ?></td>
+
+                        <td><?= $row['keluhan']; ?></td>
+
+                        <td>
+
+                        <?php
+
+                        if($row['status_kunjungan']=="Selesai"){
+                            echo "<span class='badge badge-soft-success'>Selesai</span>";
+                        }
+                        elseif($row['status_kunjungan']=="Diproses"){
+                            echo "<span class='badge badge-soft-warning'>Diproses</span>";
+                        }
+                        else{
+                            echo "<span class='badge badge-soft-danger'>Menunggu</span>";
+                        }
+
+                        ?>
+
+                        </td>
+
+                        </tr>
+
+                        <?php } ?>
+
                         </tbody>
                     </table>
                 </div>
@@ -156,30 +276,30 @@
                 <div class="mb-3">
                     <div class="d-flex justify-content-between mb-1">
                         <span>Selesai</span>
-                        <strong>78%</strong>
+                        <strong><?= $persenSelesai ?>%</strong>
                     </div>
                     <div class="progress rounded-pill">
-                        <div class="progress-bar" style="width: 78%"></div>
+                        <div class="progress-bar" style="width: <?= $persenSelesai ?>%"></div>
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <div class="d-flex justify-content-between mb-1">
                         <span>Diproses</span>
-                        <strong>15%</strong>
+                        <strong><?= $persenDiproses ?>%</strong>
                     </div>
                     <div class="progress rounded-pill">
-                        <div class="progress-bar bg-warning" style="width: 15%"></div>
+                        <div class="progress-bar bg-warning" style="width: <?= $persenDiproses ?>%"></div>
                     </div>
                 </div>
 
                 <div>
                     <div class="d-flex justify-content-between mb-1">
                         <span>Menunggu</span>
-                        <strong>7%</strong>
+                        <strong><?= $persenMenunggu ?>%</strong>
                     </div>
                     <div class="progress rounded-pill">
-                        <div class="progress-bar bg-danger" style="width: 7%"></div>
+                        <div class="progress-bar bg-danger" style="width: <?= $persenMenunggu ?>%"></div>
                     </div>
                 </div>
             </div>
@@ -190,7 +310,22 @@
 <footer class="footer text-center">
     Sistem Informasi Klinik Kampus Sederhana
 </footer>
-<script src="assets/js/app.js"></script>
 
+<script>
+
+function updateJam(){
+
+    const sekarang = new Date();
+
+    document.getElementById("jam").innerHTML =
+    sekarang.toLocaleTimeString('id-ID') + " WIB";
+
+}
+
+updateJam();
+
+setInterval(updateJam,1000);
+
+</script>
 </body>
 </html>
