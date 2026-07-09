@@ -2,6 +2,8 @@
 include "session.php";
 include "koneksi.php";
 
+$role = $_SESSION['role'];
+
 // Total Pasien
 $totalPasien = mysqli_fetch_assoc(mysqli_query($conn,
 "SELECT COUNT(*) AS total FROM pasien"));
@@ -85,20 +87,27 @@ $persenMenunggu = ($total > 0) ? round(($menunggu['total'] / $total) * 100) : 0;
 
         <ul class="nav-menu">
             <li><a href="dashboard.php" class="active">Dashboard</a></li>
-            <li class="dropdown-css">
-                <a href="#">Data Master <i class="bi bi-chevron-down ms-1"></i></a>
-                <div class="dropdown-css-menu">
-                    <a href="pasien.php">Data Pasien</a>
-                    <a href="obat.php">Data Obat</a>
-                </div>
-            </li>
-            <li class="dropdown-css">
-                <a href="#">Transaksi <i class="bi bi-chevron-down ms-1"></i></a>
-                <div class="dropdown-css-menu">
-                    <a href="kunjungan.php">Input Kunjungan</a>
-                    <a href="laporan.php">Rekap Kunjungan</a>
-                </div>
-            </li>
+
+            <?php if ($role == 'admin') { ?>
+                <li class="dropdown-css">
+                    <a href="#">Data Master <i class="bi bi-chevron-down ms-1"></i></a>
+                    <div class="dropdown-css-menu">
+                        <a href="pasien.php">Data Pasien</a>
+                    </div>
+                </li>
+                <li class="dropdown-css">
+                    <a href="#">Transaksi <i class="bi bi-chevron-down ms-1"></i></a>
+                    <div class="dropdown-css-menu">
+                        <a href="kunjungan.php">Input Kunjungan</a>
+                        <a href="laporan.php">Rekap Kunjungan</a>
+                    </div>
+                </li>
+            <?php } ?>
+
+            <?php if ($role == 'petugas') { ?>
+                <li><a href="obat.php">Data Obat</a></li>
+            <?php } ?>
+
             <li><a href="logout.php">Logout</a></li>
         </ul>
     </div>
@@ -209,7 +218,11 @@ $persenMenunggu = ($total > 0) ? round(($menunggu['total'] / $total) * 100) : 0;
             <div class="card-modern p-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="fw-bold mb-0">Kunjungan Terbaru</h5>
-                    <a href="kunjungan.php" class="btn btn-sm btn-primary">Input Kunjungan</a>
+                    <?php if ($role == 'admin') { ?>
+                        <a href="kunjungan.php" class="btn btn-sm btn-primary">Input Kunjungan</a>
+                    <?php } else { ?>
+                        <a href="obat.php" class="btn btn-sm btn-primary">Kelola Obat</a>
+                    <?php } ?>
                 </div>
 
                 <div class="table-responsive">
