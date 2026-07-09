@@ -287,7 +287,7 @@ $obat = mysqli_query($conn, "SELECT * FROM obat");
         <h5 class="fw-bold mb-3">Form Kunjungan</h5>
 
         <!-- Form input kunjungan -->
-        <form action="" method="POST" class="needs-validation" novalidate>
+        <form action="" method="POST" class="validate-form">
             <!-- Jika sedang edit, kirim id_kunjungan secara tersembunyi -->
             <?php if($edit){ ?>
                 <input type="hidden" name="id_kunjungan" value="<?= $row['id_kunjungan']; ?>">
@@ -578,14 +578,14 @@ $obat = mysqli_query($conn, "SELECT * FROM obat");
                             <a href="kunjungan.php?edit=<?= $d['id_kunjungan']; ?>"
                                class="btn btn-sm btn-warning"
                                onclick="return confirm('Yakin ingin mengedit data ini?')">
-                               Edit
+                               <i class="bi bi-pencil-square"></i>
                             </a>
 
                             <!-- Tombol hapus data -->
                             <a href="kunjungan.php?hapus=<?= $d['id_kunjungan']; ?>"
                                class="btn btn-sm btn-danger"
-                               onclick="return confirm('Yakin ingin menghapus data ini?')">
-                               Hapus
+                               class="btn btn-danger btn-sm btn-delete" >
+                               <i class="bi bi-trash-fill"></i>
                             </a>
 
                         </td>
@@ -618,25 +618,6 @@ $obat = mysqli_query($conn, "SELECT * FROM obat");
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Script validasi Bootstrap -->
-<script>
-(() => {
-  'use strict';
 
-  const forms = document.querySelectorAll('.needs-validation');
-
-  Array.from(forms).forEach(form => {
-    form.addEventListener('submit', event => {
-
-      if (!form.checkValidity()) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-
-      form.classList.add('was-validated');
-
-    }, false);
-  });
-})();
-</script>
 </body>
 </html>

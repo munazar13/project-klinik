@@ -164,7 +164,7 @@ if(isset($_GET['edit'])){
                 <h5 class="fw-bold mb-3">Form Data Obat</h5>
 
                 <!-- Form dengan class validasi -->
-                <form action="" method="POST" class="needs-validation" novalidate>
+                <form action="" method="POST" class="validate-form">
                     <input type="hidden" name="id" value="<?= $edit ? $data_edit['id_obat'] : ''; ?>">
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Kode Obat</label>
@@ -343,11 +343,13 @@ if(isset($_GET['edit'])){
                             <td>
 
                             <a href="obat.php?edit=<?= $row['id_obat'];?>" class="btn btn-warning btn-sm">
-                            Edit
+                            <i class="bi bi-pencil-square"></i>
                             </a>
 
-                            <a href="obat.php?hapus=<?= $row['id_obat'];?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus data ini?')">
-                            Hapus
+                            <a
+                            href="obat.php?hapus=<?= $row['id_obat'];?>"
+                            class="btn btn-danger btn-sm btn-delete">
+                            <i class="bi bi-trash-fill"></i>
                             </a>
                             </td>
                         </tr>

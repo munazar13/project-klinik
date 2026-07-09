@@ -315,7 +315,7 @@ if (isset($_GET['edit'])) {
 
                 <!-- Form menggunakan metode POST -->
                 <!-- novalidate digunakan agar validasi memakai Bootstrap -->
-                <form action="" method="POST" class="needs-validation" novalidate>
+                <form action="" method="POST" class="validate-form">
 
                     <!-- Menyimpan ID pasien ketika proses Edit -->
                     <input type="hidden" name="id" value="<?= $edit ? $data_edit['id_pasien'] : ''; ?>">
@@ -692,12 +692,12 @@ if(mysqli_num_rows($query) > 0){
     <td>
         <!-- Tombol Edit -->
         <a href="pasien.php?edit=<?= $row['id_pasien']; ?>"
-           class="btn btn-sm btn-warning"> Edit </a>
+           class="btn btn-sm btn-warning"> <i class="bi bi-pencil-square"></i> </a>
 
         <!-- Tombol Hapus -->
         <a href="pasien.php?hapus=<?= $row['id_pasien']; ?>"
            class="btn btn-sm btn-danger"
-           onclick="return confirm('Yakin ingin menghapus data ini?')"> Hapus </a>
+           btn-delete > <i class="bi bi-trash-fill"></i> </a>
     </td>
 
 </tr>
